@@ -68,6 +68,7 @@ type CallOutbound struct {
 	Peer         net.TCPAddr
 	Local        *net.TCPAddr `json:"-"`
 	Request      []byte
+	AccessNum    int64
 	ResponseTime int64
 	Response     []byte
 	UnixAddr     net.UnixAddr

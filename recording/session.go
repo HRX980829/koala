@@ -138,12 +138,13 @@ func (session *Session) BeforeSendToOutbound(ctx context.Context, peer net.TCPAd
 	if session == nil {
 		return
 	}
+	session.currentCallOutbound.AccessNum++
 	if (session.currentCallOutbound == nil) ||
 		(session.currentCallOutbound.Peer.String() != peer.String()) ||
 		(session.currentCallOutbound.SocketFD != socketFD) ||
 		(len(session.currentCallOutbound.Response) > 0) {
 		session.newCallOutbound(peer, local, socketFD)
-	} else if session.currentCallOutbound != nil && session.currentCallOutbound.ResponseTime > 0 {
+	} else if session.currentCallOutbound != nil && (session.currentCallOutbound.ResponseTime > 0 || session.currentCallOutbound.AccessNum > 1) {
 		// last request get a bad response, e.g., timeout
 		session.newCallOutbound(peer, local, socketFD)
 	}
